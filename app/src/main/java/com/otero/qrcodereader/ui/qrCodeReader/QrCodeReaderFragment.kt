@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.samples.vision.barcodereader.BarcodeCapture
 import com.google.android.gms.samples.vision.barcodereader.BarcodeGraphic
 import com.google.android.gms.vision.barcode.Barcode
+import com.google.android.material.snackbar.Snackbar
 import com.otero.qrcodereader.R
 import xyz.belvi.mobilevisionbarcodescanner.BarcodeRetriever
 
@@ -40,7 +41,15 @@ class QrCodeReaderFragment : Fragment(), BarcodeRetriever {
             Log.d("QrCodeReaderFragment", "Barcode read: " + barcode.displayValue)
             QrCodeConfirmationDialog(
                 QrCodeInfoUIModel(barcode.displayValue),
-                onConfirm = { barcodeCapture.resume() },
+                onConfirm = {
+                    barcodeCapture.resume()
+                    Snackbar.make(
+                        view!!,
+                        getString(R.string.qr_code_confirmation_dialog_success_message),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    //ViewModel.saveRoom()
+                },
                 onCancel = { barcodeCapture.resume() }
             ).show(parentFragmentManager)
         }

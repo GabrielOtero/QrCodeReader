@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.otero.qrcodereader.R
 import kotlinx.android.synthetic.main.fragment_read_list.*
 
@@ -44,7 +45,17 @@ class ReadListFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v){
             btn_download -> {
-                Log.d("ReadListFragment", "Export CSV")
+                ExportConfirmationDialog(
+                    onConfirm = {
+                        Log.d("ReadListFragment", "Confirm")
+                        Snackbar.make(
+                            view!!,
+                            getString(R.string.export_list_confirmation_dialog_success_message),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    },
+                    onCancel = { Log.d("ReadListFragment", "Cancel") }
+                ).show(parentFragmentManager)
             }
         }
     }
