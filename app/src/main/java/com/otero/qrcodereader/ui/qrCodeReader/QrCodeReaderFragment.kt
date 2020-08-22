@@ -27,7 +27,7 @@ class QrCodeReaderFragment : Fragment(), BarcodeRetriever {
     ): View? {
         qrCodeReaderViewModel =
             ViewModelProviders.of(this).get(QrCodeReaderViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        val root = inflater.inflate(R.layout.fragment_qr_code_reader, container, false)
         barcodeCapture = childFragmentManager.fragments[0] as BarcodeCapture
         barcodeCapture.setRetrieval(this@QrCodeReaderFragment)
         return root

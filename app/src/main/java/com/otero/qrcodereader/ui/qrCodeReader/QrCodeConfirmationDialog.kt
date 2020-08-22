@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -27,15 +26,15 @@ class QrCodeConfirmationDialog(
         qrCodeInfo.text = qrCodeUIModel.value
 
         builder.setView(view)
-            .setMessage("Deseja confirmar os dados?")
+            .setMessage(getString(R.string.qr_code_confirmation_dialog_title))
             .setPositiveButton(
-                "Confirmar"
+                getString(R.string.qr_code_confirmation_dialog_positive_button)
             ) { _, _ ->
                 this.dismiss()
                 onConfirm()
             }
             .setNegativeButton(
-                "Cancelar"
+                getString(R.string.qr_code_confirmation_dialog_negative_button)
             ) { _, _ ->
                 this.dismiss()
                 onCancel()

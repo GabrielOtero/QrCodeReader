@@ -4,4 +4,7 @@
     <string name="title_dashboard">Histórico de Leituras</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="qr_code_confirmation_dialog_title">Deseja confirmar os dados?</string>
+    <string name="qr_code_confirmation_dialog_positive_button">Confirmar</string>
+    <string name="qr_code_confirmation_dialog_negative_button">Cancelar</string>
 </resources>
