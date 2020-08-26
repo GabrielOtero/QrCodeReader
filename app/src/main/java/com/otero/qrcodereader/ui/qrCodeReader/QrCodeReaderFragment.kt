@@ -13,13 +13,20 @@ import com.google.android.gms.samples.vision.barcodereader.BarcodeGraphic
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.material.snackbar.Snackbar
 import com.otero.qrcodereader.R
+import com.otero.qrcodereader.extensions.getCurrentTimestamp
+import com.otero.qrcodereader.model.QrCodeInfoModel
+import com.otero.qrcodereader.model.QrCodeInfoUIModel
+import com.otero.qrcodereader.repository.QrCodeInfoRepository
 import xyz.belvi.mobilevisionbarcodescanner.BarcodeRetriever
+import java.util.*
 
 
 class QrCodeReaderFragment : Fragment(), BarcodeRetriever {
 
     private lateinit var qrCodeReaderViewModel: QrCodeReaderViewModel
     private lateinit var barcodeCapture: BarcodeCapture
+
+    private lateinit var noteRepository: QrCodeInfoRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,9 +38,10 @@ class QrCodeReaderFragment : Fragment(), BarcodeRetriever {
         val root = inflater.inflate(R.layout.fragment_qr_code_reader, container, false)
         barcodeCapture = childFragmentManager.fragments[0] as BarcodeCapture
         barcodeCapture.setRetrieval(this@QrCodeReaderFragment)
+
+        noteRepository = QrCodeInfoRepository(context!!)
         return root
     }
-
 
     override fun onRetrieved(barcode: Barcode?) {
         barcode?.let {
@@ -48,7 +56,10 @@ class QrCodeReaderFragment : Fragment(), BarcodeRetriever {
                         getString(R.string.qr_code_confirmation_dialog_success_message),
                         Snackbar.LENGTH_SHORT
                     ).show()
-                    //ViewModel.saveRoom()
+                    noteRepository.insertNoteTask(QrCodeInfoModel(
+                        value = barcode.displayValue,
+                        timeStamp = Date().getCurrentTimestamp()
+                    ))
                 },
                 onCancel = { barcodeCapture.resume() }
             ).show(parentFragmentManager)

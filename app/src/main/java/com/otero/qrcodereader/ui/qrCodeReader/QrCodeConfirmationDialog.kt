@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.otero.qrcodereader.R
+import com.otero.qrcodereader.model.QrCodeInfoUIModel
 
 
 class QrCodeConfirmationDialog(

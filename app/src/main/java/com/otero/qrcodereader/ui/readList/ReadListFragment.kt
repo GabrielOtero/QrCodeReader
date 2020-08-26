@@ -6,15 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.otero.qrcodereader.R
+import com.otero.qrcodereader.model.QrCodeInfoModel
+import com.otero.qrcodereader.repository.QrCodeInfoRepository
 import kotlinx.android.synthetic.main.fragment_read_list.*
 
 class ReadListFragment : Fragment(), View.OnClickListener {
 
     private lateinit var readListViewModel: ReadListViewModel
+    private lateinit var qrCodeInfoRepository: QrCodeInfoRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,6 +27,8 @@ class ReadListFragment : Fragment(), View.OnClickListener {
     ): View? {
         readListViewModel =
             ViewModelProviders.of(this).get(ReadListViewModel::class.java)
+        qrCodeInfoRepository = QrCodeInfoRepository(context!!)
+        retrieveQrCodes()
         return inflater.inflate(R.layout.fragment_read_list, container, false)
     }
 
@@ -30,6 +36,14 @@ class ReadListFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         btn_download.setOnClickListener(this)
+    }
+
+    private fun retrieveQrCodes() {
+        qrCodeInfoRepository.retrieveNotesTask().observe(viewLifecycleOwner, Observer { qrCodeModels ->
+            (read_list.adapter as ResultAdapter).qrCodeInfoModels = qrCodeModels
+            read_list.adapter?.notifyDataSetChanged()
+        })
+
     }
 
     private fun initRecyclerView() {
