@@ -1,6 +1,9 @@
 package com.otero.qrcodereader.ui.readList
 
+import android.app.DownloadManager
+import android.content.Context.DOWNLOAD_SERVICE
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +14,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.otero.qrcodereader.R
-import com.otero.qrcodereader.model.QrCodeInfoModel
 import com.otero.qrcodereader.repository.QrCodeInfoRepository
 import kotlinx.android.synthetic.main.fragment_read_list.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
+
 
 class ReadListFragment : Fragment(), View.OnClickListener {
 
@@ -67,10 +73,40 @@ class ReadListFragment : Fragment(), View.OnClickListener {
                             getString(R.string.export_list_confirmation_dialog_success_message),
                             Snackbar.LENGTH_LONG
                         ).show()
+
+                        exportFile("asdfg;546789;45678", "qwerty.csv")
+
                     },
                     onCancel = { Log.d("ReadListFragment", "Cancel") }
                 ).show(parentFragmentManager)
             }
         }
+    }
+
+    private fun exportFile(content: String, fileName : String) {
+        val absolutePath =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                .absolutePath + File.separator + fileName
+
+        val file = File(absolutePath)
+        val stream: OutputStream =
+            FileOutputStream(file)
+
+        stream.write(content.toByteArray())
+        stream.flush()
+        stream.close()
+
+        val downloadManager =
+            context!!.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+
+        downloadManager.addCompletedDownload(
+            file.name,
+            file.name,
+            true,
+            "text/plain",
+            file.absolutePath,
+            file.length(),
+            true
+        )
     }
 }
