@@ -13,7 +13,6 @@ import com.google.android.gms.samples.vision.barcodereader.BarcodeGraphic
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.material.snackbar.Snackbar
 import com.otero.qrcodereader.R
-import com.otero.qrcodereader.extensions.getCurrentTimestamp
 import com.otero.qrcodereader.model.QrCodeInfoModel
 import com.otero.qrcodereader.model.QrCodeInfoUIModel
 import com.otero.qrcodereader.repository.QrCodeInfoRepository
@@ -50,16 +49,16 @@ class QrCodeReaderFragment : Fragment(), BarcodeRetriever {
             QrCodeConfirmationDialog(
                 QrCodeInfoUIModel(barcode.displayValue),
                 onConfirm = {
+                    noteRepository.insertNoteTask(QrCodeInfoModel(
+                        value = barcode.displayValue,
+                        timeStamp = System.currentTimeMillis()
+                    ))
                     barcodeCapture.resume()
                     Snackbar.make(
                         view!!,
                         getString(R.string.qr_code_confirmation_dialog_success_message),
                         Snackbar.LENGTH_SHORT
                     ).show()
-                    noteRepository.insertNoteTask(QrCodeInfoModel(
-                        value = barcode.displayValue,
-                        timeStamp = Date().getCurrentTimestamp()
-                    ))
                 },
                 onCancel = { barcodeCapture.resume() }
             ).show(parentFragmentManager)

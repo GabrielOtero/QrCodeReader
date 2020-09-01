@@ -12,6 +12,8 @@
     <string name="export_list_confirmation_dialog_title">Selecione um intervalo de datas</string>
     <string name="export_list_confirmation_dialog_positive_button">Exportar</string>
     <string name="export_list_confirmation_dialog_negative_button">Cancelar</string>
-    <string name="export_list_confirmation_dialog_success_message">Dados exportados para o arquivo export.csv</string>
+    <string name="export_list_confirmation_dialog_success_message">%1$s criado na pasta Downloads!</string>
     <string name="export_list_confirmation_dialog_click_here"><u>Clique aqui</u></string>
+    <string name="export_list_date_error_message">Data inicial não pode ser maior que data final</string>
+    <string name="export_list_no_data_error_message">Nenhum dado foi econtrado no intervalo de data selecionado</string>
 </resources>

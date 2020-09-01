@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "qrCodesInfo")
 data class QrCodeInfoModel(
     @ColumnInfo(name = "value") var value: String? = "",
-    @ColumnInfo(name = "timeStamp") var timeStamp: String? = ""
+    @ColumnInfo(name = "timeStamp") var timeStamp: Long
 ) : Parcelable {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

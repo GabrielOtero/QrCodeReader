@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.otero.qrcodereader.R
+import com.otero.qrcodereader.extensions.getCurrentTimestamp
 import com.otero.qrcodereader.model.QrCodeInfoModel
+import java.util.*
 
 class ResultAdapter(var qrCodeInfoModels: List<QrCodeInfoModel> = listOf()) :
     RecyclerView.Adapter<ItemHolder>() {
@@ -31,6 +33,6 @@ class ItemHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     fun bind(itemResult: QrCodeInfoModel) {
         value.text = itemResult.value
-        date.text = itemResult.timeStamp ?: ""
+        date.text = Date(itemResult.timeStamp).getCurrentTimestamp()
     }
 }

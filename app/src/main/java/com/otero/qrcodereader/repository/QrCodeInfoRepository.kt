@@ -14,7 +14,8 @@ class QrCodeInfoRepository(context : Context) {
         InsertAsyncTask(noteDatabase.noteDao).execute(info)
     }
 
-    fun retrieveNotesTask(): LiveData<List<QrCodeInfoModel>> {
-        return noteDatabase.noteDao.getNotes()
-    }
+    fun retrieveNotesTask(): LiveData<List<QrCodeInfoModel>> = noteDatabase.noteDao.getNotes()
+
+    fun retrieveNotesTaskByDate(startDate: Long, endDate: Long) =
+        noteDatabase.noteDao.getNotesByDate(startDate, endDate)
 }

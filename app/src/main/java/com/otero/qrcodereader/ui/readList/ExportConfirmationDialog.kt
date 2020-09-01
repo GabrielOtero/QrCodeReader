@@ -15,7 +15,7 @@ import java.util.*
 
 
 class ExportConfirmationDialog(
-    val onConfirm: () -> Unit,
+    val onConfirm: (startDate : Long, endDate: Long) -> Unit,
     val onCancel: () -> Unit
 ) : DialogFragment(), View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
@@ -41,7 +41,7 @@ class ExportConfirmationDialog(
                 getString(R.string.export_list_confirmation_dialog_positive_button)
             ) { _, _ ->
                 this.dismiss()
-                onConfirm()
+                onConfirm(startDateCalendar.timeInMillis, endDateCalendar.timeInMillis)
             }
             .setNegativeButton(
                 getString(R.string.export_list_confirmation_dialog_negative_button)

@@ -4,7 +4,6 @@ import android.app.DownloadManager
 import android.content.Context.DOWNLOAD_SERVICE
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +13,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.otero.qrcodereader.R
+import com.otero.qrcodereader.extensions.getExportTimestamp
 import com.otero.qrcodereader.repository.QrCodeInfoRepository
 import kotlinx.android.synthetic.main.fragment_read_list.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import java.util.*
 
 
 class ReadListFragment : Fragment(), View.OnClickListener {
@@ -66,24 +67,45 @@ class ReadListFragment : Fragment(), View.OnClickListener {
         when(v){
             btn_download -> {
                 ExportConfirmationDialog(
-                    onConfirm = {
-                        Log.d("ReadListFragment", "Confirm")
-                        Snackbar.make(
-                            view!!,
-                            getString(R.string.export_list_confirmation_dialog_success_message),
-                            Snackbar.LENGTH_LONG
-                        ).show()
-
-                        exportFile("asdfg;546789;45678", "qwerty.csv")
-
+                    onConfirm = { startDate, endDate ->
+                        qrCodeInfoRepository.retrieveNotesTaskByDate(startDate, endDate)
+                            .observe(viewLifecycleOwner, Observer { qrCodeModels ->
+                                when {
+                                    startDate > endDate -> showMessage(getString(R.string.export_list_date_error_message))
+                                    qrCodeModels.isEmpty() -> showMessage(getString(R.string.export_list_no_data_error_message))
+                                    else -> {
+                                        val fileName =
+                                            "export-" + Date().getExportTimestamp() + ".csv"
+                                        val content =
+                                            qrCodeModels.map { it.value }.joinToString("\n")
+                                        exportFile(content, fileName)
+                                        showMessage(
+                                            getString(
+                                                R.string.export_list_confirmation_dialog_success_message,
+                                                fileName
+                                            )
+                                        )
+                                    }
+                                }
+                            })
                     },
-                    onCancel = { Log.d("ReadListFragment", "Cancel") }
+                    onCancel = {
+
+                    }
                 ).show(parentFragmentManager)
             }
         }
     }
 
-    private fun exportFile(content: String, fileName : String) {
+    private fun showMessage(message: String) {
+        Snackbar.make(
+            view!!,
+            message,
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
+
+    private fun exportFile(content: String, fileName: String) {
         val absolutePath =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 .absolutePath + File.separator + fileName
