@@ -1,12 +1,15 @@
 package com.otero.qrcodereader.ui.readList
 
+import android.Manifest
 import android.app.DownloadManager
 import android.content.Context.DOWNLOAD_SERVICE
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -68,26 +71,30 @@ class ReadListFragment : Fragment(), View.OnClickListener {
             btn_download -> {
                 ExportConfirmationDialog(
                     onConfirm = { startDate, endDate ->
-                        qrCodeInfoRepository.retrieveNotesTaskByDate(startDate, endDate)
-                            .observe(viewLifecycleOwner, Observer { qrCodeModels ->
-                                when {
-                                    startDate > endDate -> showMessage(getString(R.string.export_list_date_error_message))
-                                    qrCodeModels.isEmpty() -> showMessage(getString(R.string.export_list_no_data_error_message))
-                                    else -> {
-                                        val fileName =
-                                            "export-" + Date().getExportTimestamp() + ".csv"
-                                        val content =
-                                            qrCodeModels.map { it.value }.joinToString("\n")
-                                        exportFile(content, fileName)
-                                        showMessage(
-                                            getString(
-                                                R.string.export_list_confirmation_dialog_success_message,
-                                                fileName
+                        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                            qrCodeInfoRepository.retrieveNotesTaskByDate(startDate, endDate)
+                                .observe(viewLifecycleOwner, Observer { qrCodeModels ->
+                                    when {
+                                        startDate > endDate -> showMessage(getString(R.string.export_list_date_error_message))
+                                        qrCodeModels.isEmpty() -> showMessage(getString(R.string.export_list_no_data_error_message))
+                                        else -> {
+                                            val fileName =
+                                                "export-" + Date().getExportTimestamp() + ".csv"
+                                            val content =
+                                                qrCodeModels.map { it.value }.joinToString("\n")
+                                            exportFile(content, fileName)
+                                            showMessage(
+                                                getString(
+                                                    R.string.export_list_confirmation_dialog_success_message,
+                                                    fileName
+                                                )
                                             )
-                                        )
+                                        }
                                     }
-                                }
-                            })
+                                })
+                        } else {
+                            showMessage(getString(R.string.export_list_no_permission_error_message))
+                        }
                     },
                     onCancel = {
 

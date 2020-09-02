@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.otero.qrcodereader.model.QrCodeInfoModel
 
-@Database(entities = [QrCodeInfoModel::class], version = 3)
+@Database(entities = [QrCodeInfoModel::class], version = 4)
 abstract class QrCodeInfoDatabase : RoomDatabase(){
     abstract val noteDao: NoteDao
 

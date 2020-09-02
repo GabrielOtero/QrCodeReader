@@ -15,5 +15,6 @@
     <string name="export_list_confirmation_dialog_success_message">%1$s criado na pasta Downloads!</string>
     <string name="export_list_confirmation_dialog_click_here"><u>Clique aqui</u></string>
     <string name="export_list_date_error_message">Data inicial não pode ser maior que data final</string>
-    <string name="export_list_no_data_error_message">Nenhum dado foi econtrado no intervalo de data selecionado</string>
+    <string name="export_list_no_data_error_message">Nenhum dado foi econtrado no intervalo selecionado</string>
+    <string name="export_list_no_permission_error_message">Sem permissão de acessar arquivos do dispositivo</string>
 </resources>

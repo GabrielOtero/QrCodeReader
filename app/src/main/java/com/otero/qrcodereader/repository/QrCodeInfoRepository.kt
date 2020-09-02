@@ -2,6 +2,7 @@ package com.otero.qrcodereader.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.otero.qrcodereader.async.DeleteAsyncTask
 import com.otero.qrcodereader.async.InsertAsyncTask
 import com.otero.qrcodereader.model.QrCodeInfoModel
 import com.otero.qrcodereader.persistence.QrCodeInfoDatabase
@@ -12,6 +13,10 @@ class QrCodeInfoRepository(context : Context) {
 
     fun insertNoteTask(info: QrCodeInfoModel) {
         InsertAsyncTask(noteDatabase.noteDao).execute(info)
+    }
+
+    fun deleteOldNotesTask() {
+        DeleteAsyncTask(noteDatabase.noteDao).execute()
     }
 
     fun retrieveNotesTask(): LiveData<List<QrCodeInfoModel>> = noteDatabase.noteDao.getNotes()
