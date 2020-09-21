@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.otero.qrcodereader.R
 import com.otero.qrcodereader.extensions.getExportTimestamp
+import com.otero.qrcodereader.extensions.toTimePtBr
 import com.otero.qrcodereader.repository.QrCodeInfoRepository
 import kotlinx.android.synthetic.main.fragment_read_list.*
 import java.io.File
@@ -81,7 +82,7 @@ class ReadListFragment : Fragment(), View.OnClickListener {
                                             val fileName =
                                                 "export-" + Date().getExportTimestamp() + ".csv"
                                             val content =
-                                                qrCodeModels.map { it.value }.joinToString("\n")
+                                                qrCodeModels.joinToString("\n") { it.timeStamp.toTimePtBr() + ";" + it.value }
                                             exportFile(content, fileName)
                                             showMessage(
                                                 getString(
@@ -121,7 +122,7 @@ class ReadListFragment : Fragment(), View.OnClickListener {
         val stream: OutputStream =
             FileOutputStream(file)
 
-        stream.write(content.toByteArray())
+        stream.write(content.toByteArray(Charsets.ISO_8859_1))
         stream.flush()
         stream.close()
 

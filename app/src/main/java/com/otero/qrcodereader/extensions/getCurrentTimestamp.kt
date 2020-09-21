@@ -12,3 +12,9 @@ fun Date.getExportTimestamp(): String {
     val format = SimpleDateFormat("dd-MM-mmssSSS", Locale.getDefault())
     return format.format(this)
 }
+
+fun Long.toTimePtBr(): String {
+    val date = Date(this)
+    val format = SimpleDateFormat("dd/MM/YY hh:mm", Locale.getDefault())
+    return format.format(date)
+}
